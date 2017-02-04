@@ -89,7 +89,8 @@ rhcountries = {
     'Red Hat Week' : 'RH Company Events',
     'ESPP Enrollment' : 'RH Company Events',
     'Company Quarterly Meeting' : 'RH Company Events',
-    'Quarterly Company Meeting' : 'RH Company Events'
+    'Quarterly Company Meeting' : 'RH Company Events',
+    'Earnings Call' : 'RH Company Events'
 }
 
 destcals = {}
@@ -175,7 +176,7 @@ def createIfDoesNotExist(event, destId, alias):
             ## pp.pprint(foundevents)
         else:
             print("No match for '" + sumq + "' on " + alias)
-            pp.pprint(event)
+            ##pp.pprint(event)
             newevent = service.events().insert(calendarId=destId, body=event).execute()
             print('Event created: %s' % (newevent.get('htmlLink')))
     except:
