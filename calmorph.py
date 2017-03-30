@@ -163,6 +163,7 @@ def createIfDoesNotExist(event, destId, alias):
         ## remove ( and )'s as they are not matched when searching with double quotes - put a space to avoid collision with next characters
         sumq = sumq.replace('(',' ')
         sumq = sumq.replace(')',' ')
+        sumq = sumq.replace(',',' ')
         sumq = sumq.strip()
         sumq = '"'+sumq+'"'
         

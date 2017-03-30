@@ -1,0 +1,18 @@
+## Calendar Morph
+
+I wrote this little script to convert our massive company calendar that included company events + every company country holidays.
+Having all that on one calendar made the calendar useless to me.
+
+Lessons learned:
+
+* You can only create 25 calendars pr. 24 hours
+
+* Google calendar search are broken:
+   Cannot search reliably for things with ',(,),, characters in the event.
+
+* You need to wait 0.02seconds between calls to not overthrottle.
+
+* Humans are really bad at manually maintaining calenders
+   Germany - Germnay, Portugal - Portuagal, Holiday - Country, Country - Holiday
+   Some events have multiple countries in a line, others have multiple events instead.
+   
