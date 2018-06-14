@@ -36,20 +36,21 @@ rhcountries = {
     'Muharram' : 'RH PTO Malaysia', # Indonesia too?
     'Milan' : 'RH PTO Italy',
     'Victoria' : 'RH PTO Australia',
-   'Argentina' : 'RH PTO Argentina',
-   'Australia' : 'RH PTO Australia',
-   'New South Wales' : 'RH PTO Australia',
-   'Belgium' : 'RH PTO Belgium',
-   'Brazil' : 'RH PTO Brazil',
-   'Brisbane' : 'RH PTO Australia',
-   'Queensland' : 'RH PTO Australia',
-   'Canada' : 'RH PTO Canada',
-   'Chile' : 'RH PTO Chile',
-   'China' : 'RH PTO China',
-   'Colombia' : 'RH PTO Colombia',
-   'Colombita' : 'RH PTO Colombia',
-   'Czech Republic' : 'RH PTO Czech Republic',
-   'Denmark' : 'RH PTO Denmark',
+    'Argentina' : 'RH PTO Argentina',
+    'Australia' : 'RH PTO Australia',
+    'Austria' : 'RH PTO Austria', 
+    'New South Wales' : 'RH PTO Australia',
+    'Belgium' : 'RH PTO Belgium',
+    'Brazil' : 'RH PTO Brazil',
+    'Brisbane' : 'RH PTO Australia',
+    'Queensland' : 'RH PTO Australia',
+    'Canada' : 'RH PTO Canada',
+    'Chile' : 'RH PTO Chile',
+    'China' : 'RH PTO China',
+    'Colombia' : 'RH PTO Colombia',
+    'Colombita' : 'RH PTO Colombia',
+    'Czech Republic' : 'RH PTO Czech Republic',
+    'Denmark' : 'RH PTO Denmark',
     'Dubai' : 'RH PTO Dubai',
     'Finland' : 'RH PTO Finland',
     'France' : 'RH PTO France',
@@ -58,6 +59,8 @@ rhcountries = {
     'Hong Kong' : 'RH PTO Hong Kong',
     'Hungary' : 'RH PTO Hungary',
     'India' : 'RH PTO India',
+    'Mumbai' : 'RH PTO India',
+    'Pune' : 'RH PTO India',
     'Indonesia' : 'RH PTO Indonesia',
     'Ireland' : 'RH PTO Ireland',
     'Israel' : 'RH PTO Israel',
@@ -75,6 +78,7 @@ rhcountries = {
     'Russia' : 'RH PTO Russia',
     'Singapore' : 'RH PTO Singapore',
     'South Africa' : 'RH PTO South Africa',
+    'Canary Islands' : 'RH PTO Spain',
     'Spain' : 'RH PTO Spain',
     'Sweden' : 'RH PTO Sweden',
     'Switzerland' : 'RH PTO Switzerland',
@@ -84,6 +88,8 @@ rhcountries = {
     'Turkey' : 'RH PTO Turkey',
     'UAE' : 'RH PTO UAE',
     'UK' : 'RH PTO UK',
+    'United Kingdom' : 'RH PTO UK',
+    'Ukraine' : 'RH PTO Ukraine',
     'US' : 'RH PTO US',
     'Trading Window' : 'RH Company Events',
     'Red Hat Week' : 'RH Company Events',
@@ -226,7 +232,7 @@ def main():
     while True:
         calendar_list = service.calendarList().list(showHidden = True, minAccessRole = 'writer', pageToken=page_token).execute()
         for calendar_list_entry in calendar_list['items']:
-            destcals[calendar_list_entry['summary']] = calendar_list_entry['id']
+            destcals[calendar_list_entry['summary']] = calendar_list_entry ['id']
             if(calendar_list_entry['summary'].startswith('RH ')):
             #    print("Clearing " + calendar_list_entry['summary'])
             #    clear_calendar(calendar_list_entry['id'])
