@@ -30,7 +30,8 @@ APPLICATION_NAME = 'Google Calendar API Python Quickstart'
 
 service = ""
 
-## remember Portgual, Germay
+## map that maps keywords to which calendar they
+## show up in.
 rhcountries = {
     'Croatia' : 'RH PTO Croatia',
     'Muharram' : 'RH PTO Malaysia', # Indonesia too?
@@ -210,11 +211,11 @@ def enableSharing(calendar_list_entry):
                     },
                     'role': 'reader'
                 }
-                    
+
             created_rule = service.acl().insert(calendarId=cid, body=rule).execute()
-                    
+
             print (created_rule['id'])
-            
+
 def main():
     """Shows basic usage of the Google Calendar API.
 
@@ -252,6 +253,7 @@ def main():
     srcId = 'company@redhat.com'
    
 
+    ## used to just keep track of how many events created by calendar per country.
     countries = {}
     page_token = None
     while True:
@@ -279,10 +281,11 @@ def main():
 
             ## Create event in matching alias, creating the calendar if not there.
             for alias in all:
+                
                 countries[alias] = countries.pop(alias,0) + 1
                 destId = None
                 if(alias in destcals):
-                        destId = destcals[alias]
+                    destId = destcals[alias]
                 else:
                     print("Want to create calendar: " + alias)
                     #service.calendars.insert(alias).execute()
