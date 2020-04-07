@@ -212,10 +212,10 @@ def createIfDoesNotExist(event, destId, alias):
             print('Event created: %s' % (newevent.get('htmlLink')))
     except:
         e = sys.exc_info()[0]
-        print("Error!")
+        print("Error! Will try continue...")
         pp.pprint(event)
         traceback.print_exc()
-        raise e
+        #raise e
 
 def enableSharing(calendar_list_entry):
     cid = calendar_list_entry['id']
@@ -263,8 +263,9 @@ def main():
             #    cid = calendar_list_entry['id']
             #    enableSharing(cid)
               ##  pp.pprint(calendar_list_entry)
-                print(calendar_list_entry['summary'] + ' ' + "https://calendar.google.com/calendar/embed?src=" + calendar_list_entry['id'])
-                          
+                print("{}[{}]".format( 
+                    "https://calendar.google.com/calendar/embed?src=" + calendar_list_entry['id'],
+                     calendar_list_entry['summary']))
                 
         page_token = calendar_list.get('nextPageToken')
         if not page_token:
@@ -280,7 +281,7 @@ def main():
     countries = {}
     page_token = None
     while True:
-        events = service.events().list(calendarId=srcId, timeMin='2019-02-03T00:00:00.0Z', pageToken=page_token).execute()
+        events = service.events().list(calendarId=srcId, timeMin='2019-06-12T00:00:00.0Z', pageToken=page_token).execute()
         for event in events['items']:
             summary = event['summary']
 
