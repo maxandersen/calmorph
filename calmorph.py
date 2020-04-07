@@ -41,16 +41,24 @@ rhcountries = {
     'Australia' : 'RH PTO Australia',
     'Austria' : 'RH PTO Austria', 
     'New South Wales' : 'RH PTO Australia',
+    'Slovakia' : 'RH PTO Slovakia',
     'Belgium' : 'RH PTO Belgium',
     'Brazil' : 'RH PTO Brazil',
+    'Brasil' : 'RH PTO Brazil',
     'Brisbane' : 'RH PTO Australia',
     'Queensland' : 'RH PTO Australia',
     'Canada' : 'RH PTO Canada',
     'Chile' : 'RH PTO Chile',
     'China' : 'RH PTO China',
+    'Shenzhen' : 'RH PTO China',
+    'Shanghai' : 'RH PTO China',
     'Colombia' : 'RH PTO Colombia',
     'Colombita' : 'RH PTO Colombia',
     'Czech Republic' : 'RH PTO Czech Republic',
+    'Czech' : 'RH PTO Czech Republic',
+    'KSA' : 'RH PTO Kingdom of Saudi Arabia',
+    'Saudi Arabia' : 'RH PTO Kingdom of Saudi Arabia',
+    'Czech, Slovakia': 'RH PTO Czech Republic',
     'Denmark' : 'RH PTO Denmark',
     'Dubai' : 'RH PTO Dubai',
     'Finland' : 'RH PTO Finland',
@@ -72,15 +80,20 @@ rhcountries = {
     'Mexico' : 'RH PTO Mexico',
     'Netherlands' : 'RH PTO Netherlands',
     'New Zealand' : 'RH PTO New Zealand',
+    'New Zeland'  : 'Anzac Day',
     'Norway' : 'RH PTO Norway',
     'Poland' : 'RH PTO Poland',
+    'Philippines' : 'RH PTO Philippines',
     'Portgual' : 'RH PTO Portugal',
     'Portugal' : 'RH PTO Portugal',
     'Russia' : 'RH PTO Russia',
     'Singapore' : 'RH PTO Singapore',
     'South Africa' : 'RH PTO South Africa',
+    'Coruña' : 'RH PTO Spain',
     'Canary Islands' : 'RH PTO Spain',
     'Spain' : 'RH PTO Spain',
+    'Madrid' : 'RH PTO Spain',
+    'Valencia' : 'RH PTO Spain',
     'Sweden' : 'RH PTO Sweden',
     'Switzerland' : 'RH PTO Switzerland',
     'Taiwan' : 'RH PTO Taiwan',
@@ -111,15 +124,22 @@ def get_credentials():
     Returns:
         Credentials, the obtained credential.
     """
-    home_dir = os.path.expanduser('~')
-    credential_dir = os.path.join(home_dir, '.credentials')
-    if not os.path.exists(credential_dir):
-        os.makedirs(credential_dir)
-    credential_path = os.path.join(credential_dir,
-                                   'calendar-python-quickstart.json')
+    credentials = None
 
-    store = Storage(credential_path)
-    credentials = store.get()
+    if('CALMORPH_CREDENTIALS' in os.environ):
+        credjson = os.environ['CALMORPH_CREDENTIALS']
+        credentials = client.Credentials.new_from_json(credjson)
+    else:
+        home_dir = os.path.expanduser('~')
+        credential_dir = os.path.join(home_dir, '.credentials')
+        if not os.path.exists(credential_dir):
+            os.makedirs(credential_dir)
+        credential_path = os.path.join(credential_dir,
+                                    'calendar-python-quickstart.json')
+
+        store = Storage(credential_path)
+        credentials = store.get()
+    
     if not credentials or credentials.invalid:
         flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
         flow.user_agent = APPLICATION_NAME
@@ -257,7 +277,7 @@ def main():
     countries = {}
     page_token = None
     while True:
-        events = service.events().list(calendarId=srcId, timeMin='2014-02-03T00:00:00.0Z', pageToken=page_token).execute()
+        events = service.events().list(calendarId=srcId, timeMin='2019-02-03T00:00:00.0Z', pageToken=page_token).execute()
         for event in events['items']:
             summary = event['summary']
 
