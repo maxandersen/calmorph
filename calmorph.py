@@ -127,9 +127,11 @@ def get_credentials():
     credentials = None
 
     if('CALMORPH_CREDENTIALS' in os.environ):
+        print('CALMORPH_CREDENTIALS found. Using.')        
         credjson = os.environ['CALMORPH_CREDENTIALS']
         credentials = client.Credentials.new_from_json(credjson)
     else:
+        print("No CALMORPH_CREDENTIALS, looking for ~/.credentials/calendar-python-quickstart.json")
         home_dir = os.path.expanduser('~')
         credential_dir = os.path.join(home_dir, '.credentials')
         if not os.path.exists(credential_dir):
@@ -141,6 +143,7 @@ def get_credentials():
         credentials = store.get()
     
     if not credentials or credentials.invalid:
+        print("No credentials or credentials invalid - trying to authenticate with ./client_id.json")
         flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
         flow.user_agent = APPLICATION_NAME
         if flags:
