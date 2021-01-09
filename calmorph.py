@@ -82,6 +82,7 @@ rhcountries = {
     'New Zealand' : 'RH PTO New Zealand',
     'New Zeland'  : 'Anzac Day',
     'Norway' : 'RH PTO Norway',
+    'Peru' : 'RH PTO Peru',
     'Poland' : 'RH PTO Poland',
     'Philippines' : 'RH PTO Philippines',
     'Phillippines' : 'RH PTO Philippines',
@@ -113,8 +114,8 @@ rhcountries = {
     'ESPP Enrollment' : 'RH Company Events',
     'Company Quarterly Meeting' : 'RH Company Events',
     'Quarterly Company Meeting' : 'RH Company Events',
-    'Earnings Call' : 'RH Company Events'
-}
+    'Earnings Call' : 'RH Company Events',
+    }
 
 destcals = {}
 
@@ -284,9 +285,9 @@ def main():
     countries = {}
     page_token = None
     while True:
-        events = service.events().list(calendarId=srcId, timeMin='2019-06-12T00:00:00.0Z', pageToken=page_token).execute()
+        events = service.events().list(calendarId=srcId, timeMin='2020-01-01T00:00:00.0Z', pageToken=page_token).execute()
         for event in events['items']:
-            summary = event['summary']
+            summary = event.get('summary','')
 
             ## find all alias an event is relevant for
             all = set([])
