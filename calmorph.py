@@ -114,7 +114,9 @@ rhcountries = {
     'ESPP Enrollment' : 'RH Company Events',
     'Company Quarterly Meeting' : 'RH Company Events',
     'Quarterly Company Meeting' : 'RH Company Events',
+    'eNovance' : 'eNovance Events',
     'Earnings Call' : 'RH Company Events',
+    'Recharge Day' : 'RH Company Events' 
     }
 
 destcals = {}
@@ -176,7 +178,7 @@ def createIfDoesNotExist(event, destId, alias):
         event.pop('attendees', None)
         #del event['extendedProperties']
         event.pop('htmlLink', None)
-        event.pop('iCalUID', None)
+        sourceCalID = event.pop('iCalUID', None)
         ##pp.pprint(event)
         ##service.events().delete(calendarId=srcId, eventId=event['id']).execute()
     
@@ -186,6 +188,11 @@ def createIfDoesNotExist(event, destId, alias):
             startDate = event['start']['date'] + "T00:00:00.0Z"
         else:
             startDate = event['start']['dateTime']
+
+        if 'date' in event['end']:
+            endDate = event['end']['date'] + "T23:59:59.0Z"
+        else:
+            endDate = event['end']['dateTime']
 
             
         ##startDate = datetime.datetime.strptime(event['start']['date'], "%Y-%m-%d").isoFormat() + "Z"
@@ -198,10 +205,11 @@ def createIfDoesNotExist(event, destId, alias):
         sumq = sumq.replace('(',' ')
         sumq = sumq.replace(')',' ')
         sumq = sumq.replace(',',' ')
+        sumq = sumq.replace('&#39;',"'") 
         sumq = sumq.strip()
         sumq = '"'+sumq+'"'
         
-        matches = service.events().list(calendarId=destId, timeMin=startDate, q=sumq, orderBy='updated').execute()
+        matches = service.events().list(calendarId=destId, timeMin=startDate, singleEvents=True, q=sumq, orderBy='updated').execute()
         foundevents = matches.get('items', [])
         foundsome = len(foundevents)
         if(foundsome>0):
@@ -210,10 +218,25 @@ def createIfDoesNotExist(event, destId, alias):
             sys.stdout.flush()
             ## pp.pprint(foundevents)
         else:
-            print("No match for '" + sumq + "' on " + alias)
             ##pp.pprint(event)
-            newevent = service.events().insert(calendarId=destId, body=event).execute()
-            print('Event created: %s' % (newevent.get('htmlLink')))
+            print("Searching on same day events for " + summary)
+            matches = service.events().list(calendarId=destId, singleEvents=True, timeMin=startDate,timeMax=endDate).execute()
+            ondayevents = matches.get('items', [])
+            foundsomeondayevents = len(ondayevents)
+            found=False
+            if(foundsomeondayevents>0):
+                for match in ondayevents:
+                    if match.get('summary') == event.get('summary'):
+                        print("Found a match on the same day")
+                        found=True
+                        break
+            if not found:
+                if('recurringEventId' in event): 
+                    print("Skip/ignore recurring event " + summary)
+                else:
+                    print("No match for '" + sumq + "' on " + alias)
+                    newevent = service.events().insert(calendarId=destId, body=event).execute()
+                    print('Event created: %s' % (newevent.get('htmlLink')))
     except:
         e = sys.exc_info()[0]
         print("Error! Will try continue...")
@@ -285,10 +308,12 @@ def main():
     countries = {}
     page_token = None
     while True:
-        events = service.events().list(calendarId=srcId, timeMin='2020-01-01T00:00:00.0Z', pageToken=page_token).execute()
+        events = service.events().list(calendarId=srcId, timeMin='2022-01-01T00:00:00.0Z', pageToken=page_token).execute()
         for event in events['items']:
             summary = event.get('summary','')
+          #  if("Switzerland" not in summary or "Christmas" not in summary): continue
 
+            
             ## find all alias an event is relevant for
             all = set([])
             for s in rhcountries:
